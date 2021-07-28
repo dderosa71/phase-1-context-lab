@@ -37,15 +37,48 @@ function createEmployeeRecords(records){
 }
 
 function createTimeInEvent(dateTime){
-    let dataArray = dateTime.split(" ")
-    const type = 'timeIn';
+    let dataArray = dateTime.split(" ");
+    const type = 'TimeIn';
     const date = dataArray[0]
-    const hour = dataArray[1]
-    return this.timeInEvents.push(
+    const hour = parseInt(dataArray[1])
+    this.timeInEvents.push(
         {
         type: type, 
         date: date, 
         hour: hour
     })
+    return this
 }
 
+function createTimeOutEvent(dateTime){
+let dataArray = dateTime.split(" ")
+const type = 'TimeOut';
+const date = dataArray[0];
+const hour = dataArray[1];
+    this.timeOutEvents.push({
+        type: type,
+        date: date,
+        hour: parseInt(hour)
+    })
+    return this
+}
+
+function hoursWorkedOnDate(date){
+    const timeInEvent = this.timeInEvents.filter(event => event.date === date);
+    const timeOutEvent = this.timeOutEvents.filter(event => event.date === date);
+    let hoursWorked = (timeOutEvent[0].hour - timeInEvent[0].hour) / 100
+    return hoursWorked 
+}
+
+function wagesEarnedOnDate(date){
+    return hoursWorkedOnDate.call(this, date) * this.payPerHour
+}
+
+function calculatePayroll(arrayOfEmployees){
+    return arrayOfEmployees.reduce((sum, employee) => sum + allWagesFor.call(employee),0)
+}
+
+function findEmployeeByFirstName(object, firstName){
+    let onePerson = object.filter(person => firstName === person.firstName);
+    return onePerson[0]
+}
